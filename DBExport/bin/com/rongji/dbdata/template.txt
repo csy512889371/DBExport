@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+
+  <#list rowsList as rowInfoList>
+  <row type="add">
+	<#list rowInfoList as columnInfo>    
+	  <${columnInfo.columnName} name="${columnInfo.columnDesc}" isattachment="false">${columnInfo.columnValue}</${columnInfo.columnName}>
+	</#list> 
+  </row>
+  </#list> 
+</table>

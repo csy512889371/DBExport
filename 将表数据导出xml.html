@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>将表数据导出xml</title>
+<style>
+body{
+    margin: 0 auto;
+    font-family: "Microsoft YaHei", arial,sans-serif;
+    color: #444444;
+    line-height: 1;
+    padding: 30px;
+}
+@media screen and (min-width: 768px) {
+    body {
+        width: 748px;
+        margin: 10px auto;
+    }
+}
+h1, h2, h3, h4 {
+    color: #111111;
+    font-weight: 400;
+    margin-top: 1em;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: Georgia, Palatino, serif;
+}
+h1, h2, h3, h4, h5, p , dl{
+    margin-bottom: 16px;
+    padding: 0;
+}
+h1 {
+    font-size: 48px;
+    line-height: 54px;
+}
+h2 {
+    font-size: 36px;
+    line-height: 42px;
+}
+h1, h2 {
+    border-bottom: 1px solid #EFEAEA;
+    padding-bottom: 10px;
+}
+h3 {
+    font-size: 24px;
+    line-height: 30px;
+}
+h4 {
+    font-size: 21px;
+    line-height: 26px;
+}
+h5 {
+    font-size: 18px;
+    list-style: 23px;
+}
+a {
+    color: #0099ff;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+a:hover {
+    text-decoration: none;
+    color: #ff6600;
+}
+a:visited {
+    /*color: purple;*/
+}
+ul, ol {
+    padding: 0;
+    padding-left: 24px;
+    margin: 0;
+}
+li {
+    line-height: 24px;
+}
+p, ul, ol {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+ol ol, ul ol {
+    list-style-type: lower-roman;
+}
+
+/*pre {
+    padding: 0px 24px;
+    max-width: 800px;
+    white-space: pre-wrap;
+}
+code {
+    font-family: Consolas, Monaco, Andale Mono, monospace;
+    line-height: 1.5;
+    font-size: 13px;
+}*/
+
+code, pre {
+    border-radius: 3px;
+    background-color:#f7f7f7;
+    color: inherit;
+}
+
+code {
+    font-family: Consolas, Monaco, Andale Mono, monospace;
+    margin: 0 2px;
+}
+
+pre {
+    line-height: 1.7em;
+    overflow: auto;
+    padding: 6px 10px;
+    border-left: 5px solid #6CE26C;
+}
+
+pre > code {
+    border: 0;
+    display: inline;
+    max-width: initial;
+    padding: 0;
+    margin: 0;
+    overflow: initial;
+    line-height: inherit;
+    font-size: .85em;
+    white-space: pre;
+    background: 0 0;
+
+}
+
+code {
+    color: #666555;
+}
+
+
+/** markdown preview plus 对于代码块的处理有些问题, 所以使用统一的颜色 */
+/*code .keyword {
+  color: #8959a8;
+}
+
+code .number {
+  color: #f5871f;
+}
+
+code .comment {
+  color: #998
+}*/
+
+aside {
+    display: block;
+    float: right;
+    width: 390px;
+}
+blockquote {
+    border-left:.5em solid #eee;
+    padding: 0 0 0 2em;
+    margin-left:0;
+}
+blockquote  cite {
+    font-size:14px;
+    line-height:20px;
+    color:#bfbfbf;
+}
+blockquote cite:before {
+    content: '\2014 \00A0';
+}
+
+blockquote p {
+    color: #666;
+}
+hr {
+    text-align: left;
+    color: #999;
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+}
+
+dl {
+    padding: 0;
+}
+
+dl dt {
+    padding: 10px 0;
+    margin-top: 16px;
+    font-size: 1em;
+    font-style: italic;
+    font-weight: bold;
+}
+
+dl dd {
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+dd {
+    margin-left: 0;
+}
+
+/* Code below this line is copyright Twitter Inc. */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+    margin: 0;
+    vertical-align: baseline;
+    *vertical-align: middle;
+}
+button, input {
+    line-height: normal;
+    *overflow: visible;
+}
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+input[type=checkbox], input[type=radio] {
+    cursor: pointer;
+}
+/* override default chrome & firefox settings */
+input:not([type="image"]), textarea {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+input[type="search"] {
+    -webkit-appearance: textfield;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+label,
+input,
+select,
+textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: normal;
+    margin-bottom: 18px;
+}
+input[type=checkbox], input[type=radio] {
+    cursor: pointer;
+    margin-bottom: 0;
+}
+input[type=text],
+input[type=password],
+textarea,
+select {
+    display: inline-block;
+    width: 210px;
+    padding: 4px;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+    height: 18px;
+    color: #808080;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+select, input[type=file] {
+    height: 27px;
+    line-height: 27px;
+}
+textarea {
+    height: auto;
+}
+/* grey out placeholders */
+:-moz-placeholder {
+    color: #bfbfbf;
+}
+::-webkit-input-placeholder {
+    color: #bfbfbf;
+}
+input[type=text],
+input[type=password],
+select,
+textarea {
+    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+    -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+    transition: border linear 0.2s, box-shadow linear 0.2s;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: none;
+    border-color: rgba(82, 168, 236, 0.8);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+/* buttons */
+button {
+    display: inline-block;
+    padding: 4px 14px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-color: #0064cd;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
+    background-image: -moz-linear-gradient(top, #049cdb, #0064cd);
+    background-image: -ms-linear-gradient(top, #049cdb, #0064cd);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
+    background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);
+    background-image: -o-linear-gradient(top, #049cdb, #0064cd);
+    background-image: linear-gradient(top, #049cdb, #0064cd);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid #004b9a;
+    border-bottom-color: #003f81;
+    -webkit-transition: 0.1s linear all;
+    -moz-transition: 0.1s linear all;
+    transition: 0.1s linear all;
+    border-color: #0064cd #0064cd #003f81;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+button:hover {
+    color: #fff;
+    background-position: 0 -15px;
+    text-decoration: none;
+}
+button:active {
+    -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 100%;
+}
+table {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    /*-webkit-box-shadow: 0 1px 1px #ccc;
+    -moz-box-shadow: 0 1px 1px #ccc;
+    box-shadow: 0 1px 1px #ccc;   */
+}
+table tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+table td, .table th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
+    /*-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;*/
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    padding: 5px;
+}
+
+table td:first-child, table th:first-child {
+    border-left: none;
+}
+
+table th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+table th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+table th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+table tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+table tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+</style>
+</head>
+<body>
+<div id="wmd-preview" class="wmd-preview"><div class="md-section-divider"></div><div class="md-section-divider"></div><h1 data-anchor-id="f48q" id="将表数据导出xml">将表数据导出xml</h1><p data-anchor-id="1unf">公司临时有个需求要求有个工具能够导出表的数据，输出格式为xml。 <br>
+于是用了一小时写了个工具类。</p><div class="md-section-divider"></div><h2 data-anchor-id="5pc1" id="一创建-元数据表">一、创建 元数据表</h2><p data-anchor-id="qeca">存储 表和字段之间的关系，和字段描述</p><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="wo5a"><ol class="linenums"><li class="L0"><code class="language-sql"><span class="pln">CREATE TABLE </span><span class="pun">[</span><span class="pln">dbo</span><span class="pun">].[</span><span class="pln">TABLE_INFO</span><span class="pun">](</span></code></li><li class="L1"><code class="language-sql"><span class="pln">    </span><span class="pun">[</span><span class="pln">tableName</span><span class="pun">]</span><span class="pln"> </span><span class="pun">[</span><span class="pln">nvarchar</span><span class="pun">](</span><span class="lit">50</span><span class="pun">)</span><span class="pln"> NULL</span><span class="pun">,</span></code></li><li class="L2"><code class="language-sql"><span class="pln">    </span><span class="pun">[</span><span class="pln">columnName</span><span class="pun">]</span><span class="pln"> </span><span class="pun">[</span><span class="pln">nvarchar</span><span class="pun">](</span><span class="lit">50</span><span class="pun">)</span><span class="pln"> NULL</span><span class="pun">,</span></code></li><li class="L3"><code class="language-sql"><span class="pln">    </span><span class="pun">[</span><span class="pln">columnDesc</span><span class="pun">]</span><span class="pln"> </span><span class="pun">[</span><span class="pln">nvarchar</span><span class="pun">](</span><span class="lit">50</span><span class="pun">)</span><span class="pln"> NULL</span></code></li><li class="L4"><code class="language-sql"><span class="pun">)</span><span class="pln"> </span></code></li></ol></pre><div class="md-section-divider"></div><h3 data-anchor-id="mvnb" id="元数据表中的测试数据">元数据表中的测试数据</h3><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="fdan"><ol class="linenums"><li class="L0"><code class="language-sql"><span class="pln">tableName   columnName  columnDesc</span></code></li><li class="L1"><code class="language-sql"><span class="pln">A01 A0101   </span><span class="pun">姓名</span></code></li><li class="L2"><code class="language-sql"><span class="pln">A01 A0000   ID</span></code></li><li class="L3"><code class="language-sql"><span class="pln">A02 A0200   </span><span class="pun">职务组件</span></code></li><li class="L4"><code class="language-sql"><span class="pln">A02 A0000   </span><span class="pun">人员主键</span></code></li></ol></pre><div class="md-section-divider"></div><h2 data-anchor-id="wi10" id="二模版文件">二、模版文件</h2><p data-anchor-id="3ce1">template.txt </p><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="23um"><ol class="linenums"><li class="L0"><code class="language-xml"><span class="pun">&lt;?</span><span class="pln">xml version</span><span class="pun">=</span><span class="str">"1.0"</span><span class="pln"> encoding</span><span class="pun">=</span><span class="str">"UTF-8"</span><span class="pun">?&gt;</span></code></li><li class="L1"><code class="language-xml"><span class="tag">&lt;table&gt;</span></code></li><li class="L2"><code class="language-xml"></code></li><li class="L3"><code class="language-xml"><span class="pln">  &lt;#list rowsList as rowInfoList&gt;</span></code></li><li class="L4"><code class="language-xml"><span class="pln">  </span><span class="tag">&lt;row</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"add"</span><span class="tag">&gt;</span></code></li><li class="L5"><code class="language-xml"><span class="pln">    &lt;#list rowInfoList as columnInfo&gt;    </span></code></li><li class="L6"><code class="language-xml"><span class="pln">      &lt;${columnInfo.columnName} name="${columnInfo.columnDesc}" isattachment="false"&gt;${columnInfo.columnValue}&lt;/${columnInfo.columnName}&gt;</span></code></li><li class="L7"><code class="language-xml"><span class="pln">    &lt;/#list&gt; </span></code></li><li class="L8"><code class="language-xml"><span class="pln">  </span><span class="tag">&lt;/row&gt;</span></code></li><li class="L9"><code class="language-xml"><span class="pln">  &lt;/#list&gt; </span></code></li><li class="L0"><code class="language-xml"><span class="tag">&lt;/table&gt;</span></code></li></ol></pre><div class="md-section-divider"></div><h2 data-anchor-id="g9g3" id="三constantjava-常量类">三、Constant.java 常量类</h2><blockquote data-anchor-id="htt1" class="white-blockquote">
+  <ul>
+  <li>数据库配置</li>
+  <li>模版位置和模版名称</li>
+  <li>文件输出位置</li>
+  </ul>
+</blockquote><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="csds"><ol class="linenums"><li class="L0"><code class="language-java"><span class="kwd">package</span><span class="pln"> com</span><span class="pun">.</span><span class="pln">rongji</span><span class="pun">.</span><span class="pln">dbdata</span><span class="pun">;</span></code></li><li class="L1"><code class="language-java"></code></li><li class="L2"><code class="language-java"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Constant</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L3"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> TEMPLATEPATH </span><span class="pun">=</span><span class="pln"> </span><span class="str">"F:\\zwhjTemplate"</span><span class="pun">;</span></code></li><li class="L4"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> TEMPNAME </span><span class="pun">=</span><span class="pln"> </span><span class="str">"template.txt"</span><span class="pun">;</span></code></li><li class="L5"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> OUTPUT_FILE_PATH </span><span class="pun">=</span><span class="pln"> </span><span class="str">"F:\\zwhjTemplate\\"</span><span class="pun">;</span></code></li><li class="L6"><code class="language-java"></code></li><li class="L7"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> driverName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"com.microsoft.sqlserver.jdbc.SQLServerDriver"</span><span class="pun">;</span><span class="com">// 加载驱动程序</span></code></li><li class="L8"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> url </span><span class="pun">=</span><span class="pln"> </span><span class="str">"jdbc:sqlserver://localhost:1433; DatabaseName=CMIS_TEST"</span><span class="pun">;</span><span class="com">// 设置数据库连接串</span></code></li><li class="L9"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> user </span><span class="pun">=</span><span class="pln"> </span><span class="str">"sa"</span><span class="pun">;</span><span class="com">// 数据库登录用户名</span></code></li><li class="L0"><code class="language-java"><span class="pln">    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">final</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> password </span><span class="pun">=</span><span class="pln"> </span><span class="str">"123456"</span><span class="pun">;</span><span class="com">// 数据库登录密码</span></code></li><li class="L1"><code class="language-java"><span class="pun">}</span></code></li></ol></pre><div class="md-section-divider"></div><h2 data-anchor-id="iy5r" id="四如何使用">四、如何使用</h2><p data-anchor-id="1si5">CreateXML.java</p><p data-anchor-id="w9vk">String tableName = "TableName" 指定要导出的表数据。 <br>
+右键-run</p><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="x561"><ol class="linenums"><li class="L0"><code class="language-java"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> main</span><span class="pun">(</span><span class="typ">String</span><span class="pun">[]</span><span class="pln"> args</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code class="language-java"></code></li><li class="L2"><code class="language-java"><span class="pln">        </span><span class="com">// TODO 指定表面</span></code></li><li class="L3"><code class="language-java"><span class="pln">        </span><span class="typ">String</span><span class="pln"> tableName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"TableName"</span><span class="pun">;</span></code></li><li class="L4"><code class="language-java"></code></li><li class="L5"><code class="language-java"><span class="pln">        </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L6"><code class="language-java"><span class="pln">            </span><span class="com">// 配置模版</span></code></li><li class="L7"><code class="language-java"><span class="pln">            </span><span class="typ">Configuration</span><span class="pln"> configuration </span><span class="pun">=</span><span class="pln"> buildConfiguration</span><span class="pun">();</span></code></li><li class="L8"><code class="language-java"><span class="pln">            </span><span class="typ">Template</span><span class="pln"> template </span><span class="pun">=</span><span class="pln"> configuration</span><span class="pun">.</span><span class="pln">getTemplate</span><span class="pun">(</span><span class="typ">Constant</span><span class="pun">.</span><span class="pln">TEMPNAME</span><span class="pun">);</span></code></li><li class="L9"><code class="language-java"></code></li><li class="L0"><code class="language-java"><span class="pln">            </span><span class="typ">RowInfoUtils</span><span class="pln"> rowInfoUtils </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">RowInfoUtils</span><span class="pun">();</span></code></li><li class="L1"><code class="language-java"><span class="pln">            </span><span class="com">// 构造数据 根据表名</span></code></li><li class="L2"><code class="language-java"><span class="pln">            </span><span class="typ">List</span><span class="pun">&lt;</span><span class="typ">List</span><span class="pun">&lt;</span><span class="typ">ColumnInfo</span><span class="pun">&gt;&gt;</span><span class="pln"> rowsList </span><span class="pun">=</span><span class="pln"> rowInfoUtils</span><span class="pun">.</span><span class="pln">getRowInfo</span><span class="pun">(</span><span class="pln">tableName</span><span class="pun">);</span></code></li><li class="L3"><code class="language-java"><span class="pln">            </span><span class="typ">Map</span><span class="pun">&lt;</span><span class="typ">String</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> paramMap </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">HashMap</span><span class="pun">&lt;</span><span class="typ">String</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pun">&gt;();</span></code></li><li class="L4"><code class="language-java"><span class="pln">            paramMap</span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="str">"rowsList"</span><span class="pun">,</span><span class="pln"> rowsList</span><span class="pun">);</span></code></li><li class="L5"><code class="language-java"><span class="pln">            </span><span class="com">// 生成文件</span></code></li><li class="L6"><code class="language-java"><span class="pln">            outputFile</span><span class="pun">(</span><span class="pln">template</span><span class="pun">,</span><span class="pln"> paramMap</span><span class="pun">,</span><span class="pln"> tableName </span><span class="pun">+</span><span class="pln"> </span><span class="str">".xml"</span><span class="pun">);</span></code></li><li class="L7"><code class="language-java"><span class="pln">        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">IOException</span><span class="pln"> e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L8"><code class="language-java"><span class="pln">            LOG</span><span class="pun">.</span><span class="pln">error</span><span class="pun">(</span><span class="pln">e</span><span class="pun">.</span><span class="pln">getMessage</span><span class="pun">(),</span><span class="pln"> e</span><span class="pun">);</span></code></li><li class="L9"><code class="language-java"><span class="pln">        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">TemplateException</span><span class="pln"> e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L0"><code class="language-java"><span class="pln">            LOG</span><span class="pun">.</span><span class="pln">error</span><span class="pun">(</span><span class="pln">e</span><span class="pun">.</span><span class="pln">getMessage</span><span class="pun">(),</span><span class="pln"> e</span><span class="pun">);</span></code></li><li class="L1"><code class="language-java"><span class="pln">        </span><span class="pun">}</span></code></li><li class="L2"><code class="language-java"><span class="pln">    </span><span class="pun">}</span></code></li></ol></pre><div class="md-section-divider"></div><h2 data-anchor-id="lkmo" id="五生成的结果">五、生成的结果</h2><div class="md-section-divider"></div><pre class="prettyprint linenums prettyprinted" data-anchor-id="k822"><ol class="linenums"><li class="L0"><code class="language-xml"><span class="pun">&lt;?</span><span class="pln">xml version</span><span class="pun">=</span><span class="str">"1.0"</span><span class="pln"> encoding</span><span class="pun">=</span><span class="str">"UTF-8"</span><span class="pun">?&gt;</span></code></li><li class="L1"><code class="language-xml"><span class="tag">&lt;table&gt;</span></code></li><li class="L2"><code class="language-xml"></code></li><li class="L3"><code class="language-xml"><span class="pln">    </span><span class="tag">&lt;row</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"add"</span><span class="tag">&gt;</span></code></li><li class="L4"><code class="language-xml"><span class="pln">      </span><span class="tag">&lt;A0101</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"姓名"</span><span class="pln"> </span><span class="atn">isattachment</span><span class="pun">=</span><span class="atv">"false"</span><span class="tag">&gt;</span><span class="pln">"企业五"</span><span class="tag">&lt;/A0101&gt;</span></code></li><li class="L5"><code class="language-xml"><span class="pln">      </span><span class="tag">&lt;A0000</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"ID"</span><span class="pln"> </span><span class="atn">isattachment</span><span class="pun">=</span><span class="atv">"false"</span><span class="tag">&gt;</span><span class="pln">"004b8bc07cf34ba3ae752f34192f4ced"</span><span class="tag">&lt;/A0000&gt;</span></code></li><li class="L6"><code class="language-xml"><span class="pln">  </span><span class="tag">&lt;/row&gt;</span></code></li><li class="L7"><code class="language-xml"><span class="pln">  </span><span class="tag">&lt;row</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"add"</span><span class="tag">&gt;</span></code></li><li class="L8"><code class="language-xml"><span class="pln">      </span><span class="tag">&lt;A0101</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"姓名"</span><span class="pln"> </span><span class="atn">isattachment</span><span class="pun">=</span><span class="atv">"false"</span><span class="tag">&gt;</span><span class="pln">"企业六"</span><span class="tag">&lt;/A0101&gt;</span></code></li><li class="L9"><code class="language-xml"><span class="pln">      </span><span class="tag">&lt;A0000</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"ID"</span><span class="pln"> </span><span class="atn">isattachment</span><span class="pun">=</span><span class="atv">"false"</span><span class="tag">&gt;</span><span class="pln">"00e500a1f62c4cc499d7251523d67e75"</span><span class="tag">&lt;/A0000&gt;</span></code></li><li class="L0"><code class="language-xml"><span class="pln">  </span><span class="tag">&lt;/row&gt;</span></code></li><li class="L1"><code class="language-xml"></code></li><li class="L2"><code class="language-xml"><span class="tag">&lt;/table&gt;</span></code></li></ol></pre></div>
+</body>
+</html>
